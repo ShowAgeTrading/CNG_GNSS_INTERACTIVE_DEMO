@@ -1,0 +1,126 @@
+🎯 AI Context Management - Complete Workflow Guide
+📋 Universal Starting Files (Always Load First):
+
+Universal Context Foundation:
+├── MASTER_IMPLEMENTATION_PLAN.md (249 lines) - Project strategy & architecture
+├── CURRENT_STATUS.md (269 lines) - Real-time status & dependencies  
+└── UNIVERSAL_CODE_TEMPLATE.md (449 lines) - Mandatory coding standards
+Total: 967 lines - Essential context for all work
+
+🔄 Phase-Specific Implementation Workflows:
+
+Phase 01 - Project Setup (Foundation)
+Phase 01 Implementation:
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)
+├── CURRENT_STATUS.md (current state)  
+├── UNIVERSAL_CODE_TEMPLATE.md (standards)
+└── PHASE_01_PROJECT_SETUP.md (786 lines) - Directory structure, environment, git setup
+Total Context: 1,753 lines - Foundation setup with dual-layer enforcement
+
+Phase 02 - Core Architecture (Event System)
+Phase 02 Implementation:
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)
+├── CURRENT_STATUS.md (current state)
+├── UNIVERSAL_CODE_TEMPLATE.md (standards)
+├── PHASE_02_CORE_ARCHITECTURE.md (542 lines) - EventBus, SimulationClock, AppFramework
+└── INTEGRATION_MAP.md (299 lines) - Cross-component dependencies
+Total Context: 1,808 lines - Core communication architecture
+
+Phase 03 - Graphics Engine (3D Foundation)
+Phase 03 Implementation:  
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)
+├── CURRENT_STATUS.md (current state)
+├── UNIVERSAL_CODE_TEMPLATE.md (standards)
+├── PHASE_03_GRAPHICS_ENGINE.md (498 lines) - Panda3D, Globe, Camera, Materials
+└── INTEGRATION_MAP.md (299 lines) - Graphics integration points
+Total Context: 1,764 lines - 3D rendering foundation
+
+Phase 04 - Satellite System (Orbital Mechanics)
+Phase 04 Implementation:
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)
+├── CURRENT_STATUS.md (current state)  
+├── UNIVERSAL_CODE_TEMPLATE.md (standards)
+├── PHASE_04_SATELLITE_SYSTEM.md (562 lines) - Constellations, orbital mechanics, rendering
+└── INTEGRATION_MAP.md (299 lines) - Satellite-graphics integration
+Total Context: 1,827 lines - Satellite constellation simulation 
+
+Phase 05 - Receiver System (Positioning Logic)
+Phase 05 Implementation:
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)
+├── CURRENT_STATUS.md (current state)
+├── UNIVERSAL_CODE_TEMPLATE.md (standards)
+├── PHASE_05_RECEIVER_SYSTEM.md (601 lines) - BaseStation, Rover, RTK positioning
+└── INTEGRATION_MAP.md (299 lines) - Receiver-satellite dependencies
+Total Context: 1,866 lines - GNSS positioning algorithms
+
+Phase 06 - UI Controls (User Interface)
+Phase 06 Implementation:
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)  
+├── CURRENT_STATUS.md (current state)
+├── UNIVERSAL_CODE_TEMPLATE.md (standards)
+├── PHASE_06_UI_CONTROLS.md (338 lines) - ControlPanel, SelectionManager, dialogs
+└── INTEGRATION_MAP.md (299 lines) - UI-component event integration  
+Total Context: 1,603 lines - User interface and controls
+
+Phase 07 - Data Integration (File I/O & Parsing)
+Phase 07 Implementation:
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)
+├── CURRENT_STATUS.md (current state)  
+├── UNIVERSAL_CODE_TEMPLATE.md (standards)
+├── PHASE_07_DATA_INTEGRATION.md (613 lines) - NMEA parsing, error models, session mgmt
+└── INTEGRATION_MAP.md (299 lines) - Data flow integration
+Total Context: 1,878 lines - Data import/export and error modeling
+
+Phase 08 - Plugin System (Extensibility)
+Phase 08 Implementation:
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)
+├── CURRENT_STATUS.md (current state)
+├── UNIVERSAL_CODE_TEMPLATE.md (standards)
+├── PHASE_08_PLUGIN_SYSTEM.md (752 lines) - Plugin framework, hot-reload, extensibility  
+└── INTEGRATION_MAP.md (299 lines) - Plugin architecture integration
+Total Context: 1,047 lines - Plugin and extensibility framework
+
+Phase 09 - Advanced Features (Signal Analysis)
+Phase 09 Implementation:
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)
+├── CURRENT_STATUS.md (current state)
+├── UNIVERSAL_CODE_TEMPLATE.md (standards)  
+├── PHASE_09_ADVANCED_FEATURES.md (756 lines) - Signal visualization, performance analysis
+└── INTEGRATION_MAP.md (299 lines) - Advanced feature integration
+Total Context: 2,021 lines - Advanced GNSS analysis features
+
+Phase 10 - Final Polish (Testing & Deployment)
+Phase 10 Implementation:
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)
+├── CURRENT_STATUS.md (current state)
+├── UNIVERSAL_CODE_TEMPLATE.md (standards)
+├── PHASE_10_FINAL_POLISH.md (697 lines) - Testing, optimization, packaging
+└── INTEGRATION_MAP.md (299 lines) - Full system integration validation
+Total Context: 1,962 lines - Final testing and deployment
+
+📊 Cross-Phase Reference Workflows:
+Milestone Review & Planning
+Milestone Planning Session:
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)
+├── CURRENT_STATUS.md (current state)
+├── INTEGRATION_MAP.md (dependencies)
+└── MILESTONE_01_FOUNDATION.md (320 lines) - Specific milestone context
+Total Context: 1,085 lines - Milestone-focused planning
+
+Documentation Updates & Maintenance
+Documentation Maintenance:
+├── MASTER_IMPLEMENTATION_PLAN.md (strategy)  
+├── DOCUMENTATION_SUMMARY.md (233 lines) - Full file structure overview
+├── CURRENT_STATUS.md (current state)
+└── .github/file_size_limits.json - Enforcement configuration reference
+Total Context: 751 lines - Documentation management
+
+⚠️ Context Management Rules:
+
+Maximum per session: ~2,000 lines (optimal AI performance)
+Never exceed: 2,500 lines (hard limit)
+Always include: The 3 universal files (967 lines base)
+Single phase focus: One phase file + integration map when needed
+Cross-references: Load specific files only when dependencies require them
+
+This workflow ensures AI agents maintain essential context while staying within token limits for optimal performance.
