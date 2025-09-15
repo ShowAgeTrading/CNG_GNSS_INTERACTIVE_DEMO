@@ -19,6 +19,32 @@ class FileSizeLimits:
     planning_docs: int = 500
     template_files: int = 500
     config_files: int = 100
+    
+    @classmethod
+    def load_from_file(cls, config_file: Path) -> 'FileSizeLimits':
+        """Load limits from JSON config file."""
+        if config_file.exists():
+            try:
+                with open(config_file, 'r') as f:
+                    data = json.load(f)
+                # Filter to only the actual limit fields, ignore documentation fields starting with _
+                limit_data = {k: v for k, v in data.items() if not k.startswith('_')}
+                return cls(**limit_data)
+            except Exception as e:
+                print(f"Warning: Could not load config from {config_file}: {e}")
+                pass
+        return cls()  # Return defaults if file doesn't exist or is invalid
+    
+    def save_to_file(self, config_file: Path) -> None:
+        """Save limits to JSON config file."""
+        config_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(config_file, 'w') as f:
+            json.dump({
+                'code_files': self.code_files,
+                'planning_docs': self.planning_docs,
+                'template_files': self.template_files,
+                'config_files': self.config_files
+            }, f, indent=2)
 
 class FileStatus(NamedTuple):
     """File status information."""
@@ -38,7 +64,9 @@ class FileSizeMonitor:
         if not self._is_gnss_project():
             raise ValueError("File size monitoring only enabled for GNSS Interactive Demo project")
         
-        self.limits = FileSizeLimits()
+        # Load limits from config file, with defaults if not found
+        self.config_file = self.root_path / '.github' / 'file_size_limits.json'
+        self.limits = FileSizeLimits.load_from_file(self.config_file)
         
         # File type patterns - ONLY for this project structure
         self.file_patterns = {
@@ -91,25 +119,22 @@ class FileSizeMonitor:
     def get_file_limit(self, file_path: Path) -> int:
         """Get appropriate limit for file type - PROJECT SPECIFIC RULES ONLY."""
         file_str = str(file_path).lower()
-        
-        # Only apply limits to files within this project structure
-        if not str(file_path).startswith(str(self.root_path)):
-            return 999999  # No limits for files outside project
+        relative_path = str(file_path.relative_to(self.root_path)).lower()
         
         # Check template files first (most specific)
-        if 'template' in file_str and 'planning' in file_str:
+        if 'template' in relative_path and 'planning' in relative_path:
             return self.limits.template_files
         
         # Check planning docs
-        if 'planning' in file_str and file_path.suffix == '.md':
+        if 'planning' in relative_path and file_path.suffix == '.md':
             return self.limits.planning_docs
         
         # Check project source code files (src/ directory only)
-        if 'src' in file_str and file_path.suffix == '.py':
+        if relative_path.startswith('src') and file_path.suffix == '.py':
             return self.limits.code_files
         
         # Check project config files (root level only)
-        if file_path.parent == self.root_path and file_path.suffix in ['.json', '.yaml', '.yml', '.toml']:
+        if '/' not in relative_path and '\\' not in relative_path and file_path.suffix in ['.json', '.yaml', '.yml', '.toml']:
             return self.limits.config_files
         
         # Default: no limit for other files (don't interfere with other projects)
@@ -234,6 +259,33 @@ class FileSizeMonitor:
             print()
         
         return True
+    
+    def update_limits(self, file_type: str, new_limit: int) -> bool:
+        """Update file size limit for a specific file type."""
+        if file_type == 'planning':
+            self.limits.planning_docs = new_limit
+        elif file_type == 'code':
+            self.limits.code_files = new_limit
+        elif file_type == 'template':
+            self.limits.template_files = new_limit
+        elif file_type == 'config':
+            self.limits.config_files = new_limit
+        elif file_type == 'all':
+            # Set all limits to the same value
+            self.limits.planning_docs = new_limit
+            self.limits.code_files = new_limit
+            self.limits.template_files = new_limit
+            self.limits.config_files = new_limit
+        else:
+            print(f"❌ Unknown file type: {file_type}")
+            print("Valid types: planning, code, template, config, all")
+            return False
+        
+        # Save updated limits
+        self.limits.save_to_file(self.config_file)
+        print(f"✅ Updated {file_type} file limit to {new_limit} lines")
+        print(f"Config saved to: {self.config_file}")
+        return True
 
 def main():
     """Main command line interface."""
@@ -242,12 +294,25 @@ def main():
     parser.add_argument("--enforce", action="store_true", help="Enforce limits (exit with error if violations)")
     parser.add_argument("--check", action="store_true", help="Quick compliance check")
     parser.add_argument("--path", default=".", help="Root path to scan (default: current directory)")
+    parser.add_argument("--set-limit", nargs=2, metavar=('TYPE', 'LINES'), 
+                       help="Set file size limit: TYPE=planning|code|template|config|all LINES=number")
     
     args = parser.parse_args()
     
     monitor = FileSizeMonitor(args.path)
     
-    if args.report:
+    if args.set_limit:
+        file_type, limit_str = args.set_limit
+        try:
+            new_limit = int(limit_str)
+            if new_limit <= 0:
+                print("❌ Limit must be a positive number")
+                sys.exit(1)
+            monitor.update_limits(file_type, new_limit)
+        except ValueError:
+            print("❌ Limit must be a valid number")
+            sys.exit(1)
+    elif args.report:
         print(monitor.generate_report())
     elif args.enforce:
         if not monitor.enforce_limits():

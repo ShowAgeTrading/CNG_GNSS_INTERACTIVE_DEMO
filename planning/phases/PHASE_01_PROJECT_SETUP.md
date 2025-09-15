@@ -238,13 +238,22 @@ git push -u origin main
 - Initial commit pushed successfully
 - GitHub repository shows correct structure
 
-### Task 1.4: Skeleton File Creation
+### Task 1.4: Skeleton File Creation with Size Enforcement
 **Priority:** Critical  
 **Estimated Time:** 90 minutes  
 
+#### **MANDATORY FILE SIZE ENFORCEMENT PROTOCOL**
+```bash
+# DUAL-LAYER ENFORCEMENT WORKFLOW:
+# 1. Create each file
+# 2. IMMEDIATELY run: python tools/file_size_monitor.py --check
+# 3. If RED: Split file before continuing
+# 4. Git hooks provide final safety net
+```
+
 #### Core Module Skeletons
 
-**src/core/__init__.py**
+**STEP 1: Create src/core/__init__.py**
 ```python
 #!/usr/bin/env python3
 """
@@ -332,7 +341,80 @@ class EventBus:
         pass
 ```
 
+**CHECKPOINT 1: File Size Verification**
+```bash
+# MANDATORY: Check file size compliance after creating core/__init__.py and event_bus.py
+python tools/file_size_monitor.py --check
+
+# Expected: GREEN status for all files
+# If RED: STOP and split files before continuing
+```
+
+**STEP 2: Create src/core/simulation_clock.py**
+```python
+#!/usr/bin/env python3
+"""
+Project: CNG GNSS Interactive Demo
+File: simulation_clock.py
+Purpose: Manage simulation time with pause/play/speed controls
+Author: GitHub Copilot
+Created: 2025-09-15
+Last Modified: 2025-09-15
+Version: 1.0.0
+
+Dependencies:
+    - datetime - Time handling and calculations
+    - threading - Timer functionality
+
+References:
+    - Related Files: event_bus.py, app_framework.py
+    - Design Docs: planning/phases/PHASE_02_CORE_ARCHITECTURE.md
+
+TODO/FIXME:
+    - Implement time control methods (Priority: High)
+    - Add event publishing for time changes (Priority: High)
+
+Line Count: 25/200 (Soft Limit: 180)
+"""
+
+from datetime import datetime, timedelta
+import threading
+
+class SimulationClock:
+    """Manages simulation time with controls."""
+    
+    def __init__(self) -> None:
+        """Initialize simulation clock."""
+        # Implementation in Phase 02
+        pass
+```
+
+**CHECKPOINT 2: File Size Verification**
+```bash
+# MANDATORY: Check after creating simulation_clock.py
+python tools/file_size_monitor.py --check
+```
+
 #### Graphics Module Skeletons
+
+**STEP 3: Create src/graphics/__init__.py**
+```python
+#!/usr/bin/env python3
+"""
+Project: CNG GNSS Interactive Demo
+File: __init__.py
+Purpose: Graphics module initialization and exports
+Author: GitHub Copilot
+Created: 2025-09-15
+Last Modified: 2025-09-15
+Version: 1.0.0
+
+Line Count: 15/200 (Soft Limit: 180)
+"""
+
+__version__ = "1.0.0"
+__all__ = []
+```
 
 **src/graphics/globe.py** (skeleton)
 ```python
@@ -395,6 +477,13 @@ This task involves creating skeleton files for all major modules:
 - Data modules (nmea_parser, error_models, session_manager)
 - Plugin modules (plugin_interface, hot_reload_manager)
 - Utility modules (math_utils, file_utils, logging_utils)
+
+**CHECKPOINT 5: Skeleton File Size Verification**
+After creating all skeleton files, run mandatory file size check:
+```powershell
+python tools/file_size_monitor.py --check
+```
+If any violations exist, immediately split oversized files before proceeding.
 
 #### Verification
 - All skeleton files created with proper headers
@@ -477,6 +566,13 @@ pytest --cov=src --cov-report=html
 - All skeleton import tests pass
 - Coverage report generates successfully
 - Test discovery finds all test files
+
+**CHECKPOINT 6: Test Framework File Size Verification**
+After creating test framework files, run mandatory file size check:
+```powershell
+python tools/file_size_monitor.py --check
+```
+Ensure all test files remain under limits before proceeding to environment configuration.
 
 ### Task 1.6: Development Environment Configuration
 **Priority:** Medium  
@@ -569,6 +665,13 @@ html_theme = 'sphinx_rtd_theme'
 - Documentation builds successfully
 - All tools accessible via command palette
 
+**CHECKPOINT 7: Configuration File Size Verification**
+After creating all configuration files, run mandatory file size check:
+```powershell
+python tools/file_size_monitor.py --check
+```
+Verify all configuration files are within limits before proceeding to testing.
+
 ---
 
 ## Testing Strategy
@@ -640,6 +743,13 @@ html_theme = 'sphinx_rtd_theme'
 - [ ] Tests run via command palette and terminal
 - [ ] Linting and formatting tools work
 
+**CHECKPOINT 8: Final Phase 01 File Size Verification**
+Before handoff to Phase 02, run comprehensive file size check:
+```powershell
+python tools/file_size_monitor.py --check
+```
+**MANDATORY:** All files must pass size limits before Phase 02 can begin.
+
 ---
 
 ## Handoff to Phase 02
@@ -671,4 +781,6 @@ Immediately upon Phase 01 completion verification
 - Template: `planning/templates/UNIVERSAL_CODE_TEMPLATE.md`
 - Next Phase: `planning/phases/PHASE_02_CORE_ARCHITECTURE.md`
 
-**Line Count:** 487/500
+**Line Count:** 487/500#   T e s t   l i n e   t o   m a k e   f i l e   b i g g e r 
+ 
+ 

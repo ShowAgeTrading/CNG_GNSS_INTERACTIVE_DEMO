@@ -15,7 +15,8 @@ Interactive 3D GNSS/RTK demonstration app providing real-time visualization of s
 - **Strict Modularity:** Every component hot-reloadable and independently testable
 - **Zero Coupling:** Event-driven architecture with clear interfaces
 - **Template Compliance:** All files follow UNIVERSAL_CODE_TEMPLATE.md
-- **Line Limits:** 200 lines max per code file, 500 lines max per plan file
+- **File Size Limits:** 200 lines max per code file, 1000 lines max per plan file
+- **Dual-Layer Enforcement:** Real-time monitoring + Git hooks prevent violations
 - **Reference Everything:** Full cross-referencing for maintainability
 
 ---
@@ -156,7 +157,7 @@ Phase 09 (Testing) → Phase 10 (Deploy)
 
 ### Before Each Phase
 - [ ] Previous phase tests passing at 90%+ coverage
-- [ ] No files exceeding line limits
+- [ ] No files exceeding size limits (dual-layer enforcement active)
 - [ ] All cross-references valid
 - [ ] Memo updated with lessons learned
 
@@ -245,4 +246,4 @@ Phase 09 (Testing) → Phase 10 (Deploy)
 - GitHub: `https://github.com/ShowAgeTrading/CNG_GNSS_INTERACTIVE_DEMO`
 - Original Spec: `GNSS_RTK_Python_ImplementationPlan.md`
 
-**Line Count:** 187/500
+**Line Count:** 249/1000

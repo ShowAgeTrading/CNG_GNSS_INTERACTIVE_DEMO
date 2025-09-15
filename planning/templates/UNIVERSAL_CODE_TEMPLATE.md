@@ -142,6 +142,41 @@ if __name__ == "__main__":
 - **Class:** 120 lines maximum (split if larger)
 - **Import Section:** 15 lines maximum
 
+### File Size Enforcement Protocol (MANDATORY)
+**DUAL-LAYER ENFORCEMENT SYSTEM:**
+
+**Layer 1: Real-Time Checking (After Each File Creation)**
+```bash
+# MANDATORY after creating/modifying any file
+python tools/file_size_monitor.py --check
+
+# If GREEN: Continue development
+# If RED: STOP immediately and split file before proceeding
+```
+
+**Layer 2: Git Commit Enforcement (Safety Net)**
+```bash
+# Automatic pre-commit hook blocks oversized files
+git commit -m "message"
+# Hook runs automatically and blocks if violations found
+```
+
+**File Creation Workflow (MANDATORY PROCESS):**
+1. Create file with proper header template
+2. Implement functionality
+3. **CHECKPOINT:** Run `python tools/file_size_monitor.py --check`
+4. If violations detected:
+   - Split file immediately using guidelines below
+   - Re-run check until GREEN
+5. Proceed to next file
+6. Before any commit: Git hooks provide final verification
+
+**File Splitting Guidelines:**
+- **Split by responsibility:** Each file = one clear purpose
+- **Extract utilities:** Helper functions → separate `_utils.py` file
+- **Extract data classes:** Data structures → separate `_models.py` file
+- **Extract constants:** Configuration → separate `_config.py` file
+
 ---
 
 ## Documentation Standards

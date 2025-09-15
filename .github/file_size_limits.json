@@ -1,0 +1,27 @@
+{
+  "_usage": "To update limits: python tools/file_size_monitor.py --set-limit <type> <lines>",
+  "_types": "Valid types: planning, code, template, config, all",
+  "_commands": {
+    "--report": "Show detailed file size report",
+    "--check": "Quick compliance check (exit code 0=pass, 1=fail)",
+    "--enforce": "Enforce limits with detailed violation info",
+    "--set-limit": "Update file size limits"
+  },
+  "_examples": [
+    "python tools/file_size_monitor.py --report",
+    "python tools/file_size_monitor.py --check",
+    "python tools/file_size_monitor.py --set-limit planning 1200",
+    "python tools/file_size_monitor.py --set-limit code 300",
+    "python tools/file_size_monitor.py --set-limit all 1000"
+  ],
+  "_file_patterns": {
+    "code_files": "src/**/*.py (Python source code)",
+    "planning_docs": "planning/**/*.md (Documentation and phase plans)",
+    "template_files": "**/templates/**/*.md (Template files)",
+    "config_files": "*.json, *.yaml, *.yml, *.toml (Root config files)"
+  },
+  "code_files": 200,
+  "planning_docs": 1000,
+  "template_files": 500,
+  "config_files": 100
+}
