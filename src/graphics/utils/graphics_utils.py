@@ -7,9 +7,15 @@ and provide reusable performance monitoring across graphics components.
 
 import time
 import logging
-import psutil
 import gc
 from typing import Optional, Dict, Any
+
+# Optional imports
+try:
+    import psutil
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    PSUTIL_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -67,6 +73,9 @@ class PerformanceMonitor:
     
     def _update_memory_stats(self) -> None:
         """Update memory usage statistics."""
+        if not PSUTIL_AVAILABLE:
+            return
+            
         try:
             process = psutil.Process()
             memory_info = process.memory_info()

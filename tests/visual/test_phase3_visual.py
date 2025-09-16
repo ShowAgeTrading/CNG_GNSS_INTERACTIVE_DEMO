@@ -35,6 +35,10 @@ except ImportError as e:
     PANDA3D_AVAILABLE = False
     print(f"❌ Panda3D import failed: {e}")
     print("→ Visual test requires Panda3D installation")
+    # Create a dummy ShowBase class for when Panda3D is not available
+    class ShowBase:
+        def __init__(self):
+            pass
 
 
 class Phase3VisualTest(ShowBase):

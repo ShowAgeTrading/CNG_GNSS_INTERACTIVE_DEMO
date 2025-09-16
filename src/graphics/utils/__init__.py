@@ -9,11 +9,11 @@ This package contains extracted utilities from graphics components:
 
 from .graphics_utils import PerformanceMonitor
 from .asset_manager import AssetManager
-from .panda3d_utils import setup_node, configure_texture
+from .panda3d_utils import setup_node, apply_transform
 
 __all__ = [
     'PerformanceMonitor',
     'AssetManager', 
     'setup_node',
-    'configure_texture'
+    'apply_transform'
 ]

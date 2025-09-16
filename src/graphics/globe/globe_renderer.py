@@ -38,10 +38,12 @@ from .texture_manager import TextureManager
 from .coordinate_system import CoordinateSystem
 from .material_manager import MaterialManager
 from .model_loader import ModelLoader
+from .globe_setup import GlobeSetupOrchestrator
 
 # Import asset manager utilities
 try:
     from ..utils.asset_manager import AssetManager
+    from ..utils.panda3d_utils import apply_transform
 except ImportError:
     # Fallback for when running tests directly
     import sys
@@ -87,6 +89,7 @@ class GlobeRenderer(DirectObject):
         # Material and model management
         self._material_manager = MaterialManager()
         self._model_loader = ModelLoader(assets_path)
+        self._setup_orchestrator = GlobeSetupOrchestrator(assets_path)
         self._initialized = False
         
         logger.info("Globe renderer initialized")
@@ -99,21 +102,22 @@ class GlobeRenderer(DirectObject):
             # Initialize texture manager
             self._texture_manager = TextureManager(self._assets_path)
             
-            # Load Earth model using model loader
-            self._globe_model = self._model_loader.load_earth_model(self._render, self._globe_scale)
-            if not self._globe_model:
-                logger.error("Failed to load Earth model")
+            # Use orchestrator for complex setup
+            setup_result = self._setup_orchestrator.orchestrate_full_setup(
+                self._texture_manager,
+                self._material_manager,
+                self._model_loader,
+                self._render,
+                self._globe_scale
+            )
+            
+            if not setup_result['success']:
+                logger.error(f"Globe setup failed: {setup_result['error']}")
                 return False
             
-            # Load textures
-            if not self._load_earth_textures():
-                logger.error("Failed to load Earth textures")
-                return False
-            
-            # Apply materials and textures using material manager
-            if not self._setup_materials_and_textures():
-                logger.error("Failed to setup Earth materials and textures")
-                return False
+            # Store results
+            self._globe_model = setup_result['globe_model']
+            self._earth_textures = setup_result['earth_textures']
             
             self._initialized = True
             logger.info("Globe renderer initialization complete")
@@ -123,59 +127,7 @@ class GlobeRenderer(DirectObject):
             logger.error(f"Failed to initialize globe renderer: {e}")
             return False
 
-    def _load_earth_textures(self) -> bool:
-        """Load all Earth texture layers."""
-        try:
-            if not self._texture_manager:
-                logger.error("Texture manager not initialized")
-                return False
-            
-            # Load all texture layers
-            self._earth_textures = self._texture_manager.load_earth_textures()
-            
-            # Check if critical textures loaded
-            if not self._earth_textures.get('day'):
-                logger.error("Failed to load day texture - critical for rendering")
-                return False
-            
-            # Log texture loading results
-            total_memory = self._texture_manager.get_total_memory_usage()
-            logger.info(f"Loaded Earth textures, total memory: {total_memory/1024/1024:.1f} MB")
-            
-            return True
-            
-        except Exception as e:
-            logger.error(f"Error loading Earth textures: {e}")
-            return False
-    
-    def _setup_materials_and_textures(self) -> bool:
-        """Setup materials and textures using MaterialManager."""
-        try:
-            if not self._globe_model:
-                logger.error("Globe model not loaded")
-                return False
-            
-            # Create and apply material
-            earth_material = self._material_manager.create_earth_material()
-            if not earth_material:
-                return False
-            
-            if not self._material_manager.apply_material_to_globe(self._globe_model, earth_material):
-                return False
-            
-            # Apply texture layers
-            if not self._material_manager.apply_texture_layers(self._globe_model, self._earth_textures):
-                return False
-            
-            # Configure rendering properties  
-            self._material_manager.configure_rendering_properties(self._globe_model)
-            
-            logger.info("Materials and textures setup complete")
-            return True
-            
-        except Exception as e:
-            logger.error(f"Error setting up materials and textures: {e}")
-            return False
+
     
     def update_day_night_blend(self, sun_position: Vec3) -> None:
         """Update day/night texture blending based on sun position."""
@@ -187,7 +139,11 @@ class GlobeRenderer(DirectObject):
         """Set globe scale factor."""
         self._globe_scale = scale
         if self._globe_model:
-            self._globe_model.setScale(scale)
+            try:
+                apply_transform(self._globe_model, scale=(scale, scale, scale))
+            except NameError:
+                # Fallback if utilities not available
+                self._globe_model.setScale(scale)
     
     def get_coordinate_system(self) -> CoordinateSystem:
         """Get coordinate system for positioning objects on globe."""
@@ -197,20 +153,8 @@ class GlobeRenderer(DirectObject):
         """Get the globe NodePath for external manipulation."""
         return self._globe_model
     
-    def get_performance_info(self) -> Dict[str, any]:
-        """Get performance information for monitoring."""
-        info = {
-            'initialized': self._initialized,
-            'model_loaded': self._globe_model is not None,
-            'textures_loaded': len([t for t in self._earth_textures.values() if t])
-        }
-        if self._texture_manager:
-            info['texture_memory_mb'] = self._texture_manager.get_total_memory_usage() / (1024*1024)
-        return info
-    
     def cleanup(self) -> None:
         """Clean up globe renderer resources."""
-        logger.info("Cleaning up globe renderer...")
         if self._globe_model:
             self._globe_model.removeNode()
             self._globe_model = None
@@ -219,7 +163,3 @@ class GlobeRenderer(DirectObject):
             self._texture_manager = None
         self._earth_textures.clear()
         self._initialized = False
-        logger.info("Globe renderer cleanup complete")
-
-
-# Line count: 227/229

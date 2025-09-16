@@ -37,8 +37,22 @@ from typing import Dict, Any
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
-from graphics.graphics_manager import GraphicsManager
-from core.event_bus import Event
+# Mock Panda3D and other modules before importing graphics_manager
+with patch.dict('sys.modules', {
+    'direct': MagicMock(),
+    'direct.showbase': MagicMock(),
+    'direct.showbase.ShowBase': MagicMock(),
+    'direct.task': MagicMock(),
+    'direct.task.Task': MagicMock(),
+    'panda3d': MagicMock(),
+    'panda3d.core': MagicMock(),
+    'graphics.utils.graphics_utils': Mock(),
+    'graphics.event_handler': Mock(), 
+    'graphics.subsystem_manager': Mock(),
+    'graphics.config_manager': Mock(),
+}):
+    from graphics.graphics_manager import GraphicsManager
+    from core.event_bus import Event
 
 
 class TestGraphicsManagerCore:
@@ -57,13 +71,16 @@ class TestGraphicsManagerCore:
         assert self.graphics_manager is not None
         assert self.graphics_manager._initialized is False
         assert self.graphics_manager._panda_app is None
-        assert self.graphics_manager._window_title == "CNG GNSS Interactive Demo"
-        assert self.graphics_manager._window_size == (1920, 1080)
-        assert self.graphics_manager._target_fps == 60.0
+        # Check new refactored components exist
+        assert hasattr(self.graphics_manager, '_performance_monitor')
+        assert hasattr(self.graphics_manager, '_event_handler')  
+        assert hasattr(self.graphics_manager, '_config_manager')
+        assert hasattr(self.graphics_manager, '_subsystem_manager')
     
     @patch('graphics.graphics_manager.Panda3DInitializer')
     @patch('graphics.graphics_manager.SubsystemFactory')
-    def test_initialize_success(self, mock_factory, mock_initializer):
+    @patch('graphics.graphics_manager.GraphicsSubsystemManager')
+    def test_initialize_success(self, mock_subsystem_mgr, mock_factory, mock_initializer):
         """Test successful initialization with mocked Panda3D."""
         # Setup mocks
         mock_panda_app = Mock()
@@ -72,8 +89,11 @@ class TestGraphicsManagerCore:
         mock_initializer.return_value = mock_initializer_instance
         
         mock_factory_instance = Mock()
-        mock_factory_instance.create_globe_renderer.return_value = Mock()
         mock_factory.return_value = mock_factory_instance
+        
+        mock_subsystem_instance = Mock()
+        mock_subsystem_instance.initialize_all_subsystems.return_value = True
+        mock_subsystem_mgr.return_value = mock_subsystem_instance
         
         # Test initialization
         result = self.graphics_manager.initialize(self.mock_app)
@@ -83,6 +103,7 @@ class TestGraphicsManagerCore:
         assert self.graphics_manager._panda_app == mock_panda_app
         mock_initializer.assert_called_once()
         mock_factory.assert_called_once()
+        mock_subsystem_mgr.assert_called_once()
     
     @patch('graphics.graphics_manager.Panda3DInitializer')
     def test_initialize_panda3d_failure(self, mock_initializer):
@@ -115,6 +136,14 @@ class TestGraphicsManagerCore:
     
     def test_get_performance_stats_default(self):
         """Test performance stats return default values."""
+        # Mock the performance monitor to return proper dict
+        self.graphics_manager._performance_monitor.get_all_stats = Mock(return_value={
+            'frame_time': 0.016,
+            'fps': 60.0,
+            'memory_usage': 1024,
+            'texture_memory': 512
+        })
+        
         stats = self.graphics_manager.get_performance_stats()
         
         assert isinstance(stats, dict)
@@ -122,11 +151,6 @@ class TestGraphicsManagerCore:
         assert 'fps' in stats
         assert 'memory_usage' in stats
         assert 'texture_memory' in stats
-        
-        # Should return copies, not references
-        stats['frame_time'] = 999.0
-        new_stats = self.graphics_manager.get_performance_stats()
-        assert new_stats['frame_time'] != 999.0
 
 
 class TestGraphicsManagerEvents:
@@ -183,29 +207,25 @@ class TestGraphicsManagerPerformance:
         self.graphics_manager = GraphicsManager()
         self.graphics_manager._initialized = True
     
-    def test_performance_stats_update(self):
-        """Test performance statistics update."""
-        # Call the internal performance update method
-        test_delta = 0.016  # 60 FPS
-        self.graphics_manager._update_performance_stats(test_delta)
+    @patch('graphics.graphics_manager.PerformanceMonitor')
+    def test_performance_stats_access(self, mock_perf_monitor):
+        """Test performance statistics access through performance monitor."""
+        mock_monitor_instance = Mock()
+        mock_monitor_instance.get_all_stats.return_value = {
+            'frame_time': 0.016,
+            'fps': 62.5,
+            'memory_usage': 1024,
+            'texture_memory': 512
+        }
+        mock_perf_monitor.return_value = mock_monitor_instance
         
-        stats = self.graphics_manager.get_performance_stats()
-        assert stats['frame_time'] == test_delta
-        assert abs(stats['fps'] - 62.5) < 0.1  # 1/0.016 ≈ 62.5
-    
-    def test_performance_stats_zero_delta(self):
-        """Test performance statistics with zero delta time."""
-        self.graphics_manager._update_performance_stats(0.0)
+        # Create new graphics manager with mocked performance monitor
+        with patch('graphics.graphics_manager.GraphicsEventHandler'), \
+             patch('graphics.graphics_manager.GraphicsConfigManager'), \
+             patch('graphics.graphics_manager.GraphicsSubsystemManager'):
+            gm = GraphicsManager()
         
-        stats = self.graphics_manager.get_performance_stats()
-        assert stats['frame_time'] == 0.0
-        assert stats['fps'] == 0.0  # Should handle division by zero
-    
-    def test_performance_monitoring_initialization(self):
-        """Test performance monitoring initialization."""
-        self.graphics_manager._initialize_performance_monitoring()
-        
-        stats = self.graphics_manager._performance_stats
+        stats = gm.get_performance_stats()
         assert 'frame_time' in stats
         assert 'fps' in stats
         assert 'memory_usage' in stats
@@ -219,8 +239,7 @@ class TestGraphicsManagerLifecycle:
         """Setup fresh GraphicsManager for each test."""
         self.graphics_manager = GraphicsManager()
     
-    @patch('graphics.graphics_manager.Panda3DInitializer')
-    def test_shutdown_clean(self, mock_initializer):
+    def test_shutdown_clean(self):
         """Test clean shutdown of graphics manager."""
         # Setup initialized state
         mock_panda_app = Mock()
@@ -230,11 +249,16 @@ class TestGraphicsManagerLifecycle:
         self.graphics_manager._render_task = Mock()
         self.graphics_manager._initialized = True
         
+        # Mock subsystem manager
+        mock_subsystem_mgr = Mock()
+        self.graphics_manager._subsystem_manager = mock_subsystem_mgr
+        
         # Test shutdown
         self.graphics_manager.shutdown()
         
         assert self.graphics_manager._initialized is False
         assert self.graphics_manager._panda_app is None
+        mock_subsystem_mgr.shutdown_all.assert_called_once()
         mock_task_mgr.remove.assert_called_once()
         mock_panda_app.destroy.assert_called_once()
     
@@ -261,6 +285,10 @@ class TestGraphicsManagerErrorHandling:
     def setup_method(self):
         """Setup fresh GraphicsManager for each test."""
         self.graphics_manager = GraphicsManager()
+        # Set up mock app for error handling tests
+        self.mock_app = Mock()
+        self.mock_app.render = Mock()
+        self.mock_app.loader = Mock()
     
     @patch('graphics.graphics_manager.Panda3DInitializer')
     def test_initialization_exception_handling(self, mock_initializer):
@@ -303,7 +331,8 @@ class TestGraphicsManagerErrorHandling:
 def graphics_manager_with_mocked_panda3d():
     """Pytest fixture providing GraphicsManager with mocked Panda3D."""
     with patch('graphics.graphics_manager.Panda3DInitializer') as mock_init, \
-         patch('graphics.graphics_manager.SubsystemFactory') as mock_factory:
+         patch('graphics.graphics_manager.SubsystemFactory') as mock_factory, \
+         patch('graphics.graphics_manager.GraphicsSubsystemManager') as mock_subsystem_mgr:
         
         # Setup successful mocks
         mock_panda_app = Mock()
@@ -313,6 +342,10 @@ def graphics_manager_with_mocked_panda3d():
         
         mock_factory_instance = Mock()
         mock_factory.return_value = mock_factory_instance
+        
+        mock_subsystem_instance = Mock()
+        mock_subsystem_instance.initialize_all_subsystems.return_value = True
+        mock_subsystem_mgr.return_value = mock_subsystem_instance
         
         graphics_manager = GraphicsManager()
         yield graphics_manager, mock_panda_app

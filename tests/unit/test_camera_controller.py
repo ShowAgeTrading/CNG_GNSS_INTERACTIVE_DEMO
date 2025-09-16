@@ -37,10 +37,16 @@ from typing import Set
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
-# Mock Panda3D before importing camera controller
+# Mock Panda3D and utilities before importing camera controller
 with patch.dict('sys.modules', {
-    'panda3d.core': Mock(),
-    'direct.showbase.DirectObject': Mock()
+    'direct': MagicMock(),
+    'direct.showbase': MagicMock(),
+    'direct.showbase.DirectObject': MagicMock(),
+    'direct.task': MagicMock(),
+    'panda3d': MagicMock(),
+    'panda3d.core': MagicMock(),
+    'graphics.utils.panda3d_utils': Mock(),
+    'graphics.graphics_manager': Mock()
 }):
     from graphics.camera.camera_controller import CameraController
 

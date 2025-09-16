@@ -27,12 +27,29 @@ import logging
 from typing import Optional, Dict, Any
 from pathlib import Path
 
-from direct.showbase.ShowBase import ShowBase
-from direct.showbase.DirectObject import DirectObject
-from panda3d.core import (
-    WindowProperties, FrameBufferProperties,
-    PythonTask
-)
+try:
+    from direct.showbase.ShowBase import ShowBase
+    from direct.showbase.DirectObject import DirectObject
+    from panda3d.core import (
+        WindowProperties, FrameBufferProperties,
+        PythonTask
+    )
+    PANDA3D_AVAILABLE = True
+except ImportError:
+    # Mock classes for when Panda3D is not available (testing)
+    PANDA3D_AVAILABLE = False
+    class ShowBase:
+        def __init__(self):
+            pass
+    class DirectObject:
+        def __init__(self):
+            pass
+    class WindowProperties:
+        pass
+    class FrameBufferProperties:
+        pass
+    class PythonTask:
+        pass
 
 try:
     from ..core.component_interface import ComponentInterface
@@ -49,6 +66,9 @@ except ImportError:
 from .subsystem_factory import SubsystemFactory
 from .panda3d_initializer import Panda3DInitializer
 from .utils.graphics_utils import PerformanceMonitor
+from .event_handler import GraphicsEventHandler
+from .subsystem_manager import GraphicsSubsystemManager
+from .config_manager import GraphicsConfigManager
 
 logger = logging.getLogger(__name__)
 
@@ -71,24 +91,15 @@ class GraphicsManager(ComponentInterface, DirectObject):
         self._panda_app: Optional[ShowBase] = None
         self._render_task: Optional[PythonTask] = None
         
-        # Performance monitoring
+        # Core components
         self._performance_monitor = PerformanceMonitor()
+        self._event_handler = GraphicsEventHandler()
+        self._config_manager = GraphicsConfigManager()
+        self._subsystem_manager = None
         
-        # Graphics subsystem components
-        self._globe_renderer = None
-        self._camera_controller = None
-        self._viewport_manager = None
-        self._material_manager = None
-        self._lighting_system = None
-        
-        # Factory for creating subsystems
-        self._subsystem_factory = None
+        # Panda3D components
         self._panda_initializer = None
-        
-        # Configuration
-        self._window_title = "CNG GNSS Interactive Demo"
-        self._window_size = (1920, 1080)
-        self._target_fps = 60.0
+        self._subsystem_factory = None
         self._initialized = False
     
     @property
@@ -101,26 +112,15 @@ class GraphicsManager(ComponentInterface, DirectObject):
         try:
             logger.info("Initializing graphics manager...")
             
-            # Initialize Panda3D engine using initializer
-            self._panda_initializer = Panda3DInitializer(self._window_title, self._window_size)
-            self._panda_app = self._panda_initializer.initialize_panda3d()
-            if not self._panda_app:
-                logger.error("Failed to initialize Panda3D")
+            if not self._initialize_panda3d():
                 return False
-            
-            # Initialize subsystem factory
-            assets_path = app.config.get('assets_path', Path.cwd() / 'assets')
-            self._subsystem_factory = SubsystemFactory(assets_path, self._panda_app)
-            
-            # Initialize graphics subsystems using factory
+            if not self._initialize_factory(app):
+                return False
             if not self._initialize_graphics_subsystems():
                 logger.error("Failed to initialize graphics subsystems")
                 return False
             
-            # Subscribe to core events
             self._subscribe_to_events(app)
-            
-            # Set up render loop task
             self._setup_render_task()
             
             self._initialized = True
@@ -131,27 +131,28 @@ class GraphicsManager(ComponentInterface, DirectObject):
             logger.error(f"Failed to initialize graphics manager: {e}")
             return False
 
-    def _initialize_graphics_subsystems(self) -> bool:
-        """Initialize all graphics subsystems using factory."""
-        try:
-            # Initialize globe renderer
-            self._globe_renderer = self._subsystem_factory.create_globe_renderer()
-            if not self._globe_renderer:
-                logger.error("Failed to create globe renderer")
-                return False
-                
-            # Initialize camera controller  
-            self._camera_controller = self._subsystem_factory.create_camera_controller()
-            if not self._camera_controller:
-                logger.error("Failed to create camera controller")
-                return False
-                
-            logger.info("Graphics subsystems initialized successfully")
-            return True
-            
-        except Exception as e:
-            logger.error(f"Error initializing graphics subsystems: {e}")
+    def _initialize_panda3d(self) -> bool:
+        """Initialize Panda3D engine."""
+        window_title, window_size = self._config_manager.get_window_config()
+        self._panda_initializer = Panda3DInitializer(window_title, window_size)
+        self._panda_app = self._panda_initializer.initialize_panda3d()
+        if not self._panda_app:
+            logger.error("Failed to initialize Panda3D")
             return False
+        return True
+
+    def _initialize_factory(self, app) -> bool:
+        """Initialize subsystem factory."""
+        assets_path = app.config.get('assets_path', Path.cwd() / 'assets')
+        self._subsystem_factory = SubsystemFactory(assets_path, self._panda_app)
+        
+        # Initialize subsystem manager
+        self._subsystem_manager = GraphicsSubsystemManager(self._subsystem_factory)
+        return True
+
+    def _initialize_graphics_subsystems(self) -> bool:
+        """Initialize all graphics subsystems using subsystem manager."""
+        return self._subsystem_manager.initialize_all_subsystems()
 
     def _subscribe_to_events(self, app) -> None:
         """Subscribe to relevant events from the event bus."""
@@ -185,32 +186,24 @@ class GraphicsManager(ComponentInterface, DirectObject):
         """Process graphics-related events."""
         if not self._initialized:
             return
-        
-        # Parse event type (format: "category.action" or "category.action.detail")
-        event_parts = event.event_type.split('.')
-        if len(event_parts) < 2:
-            return
-            
-        category = event_parts[0]
-        action = event_parts[1]
-        
-        if category == "time":
-            pass  # Handle time-based updates
-        elif category == "config" and action == "graphics":
-            self._handle_config_change(event.data)
-        elif category == "user" and action == "input":
-            pass  # Handle user input for camera
-    
-    def _handle_config_change(self, config_data: Dict[str, Any]) -> None:
-        """Handle graphics configuration changes."""
-        pass  # Implementation for dynamic config updates
+        self._event_handler.handle_graphics_event(event)
     
     def get_performance_stats(self) -> Dict[str, float]:
         """Get current performance statistics."""
         return self._performance_monitor.get_all_stats()
     
+    def get_globe_renderer(self):
+        """Get globe renderer instance."""
+        return self._subsystem_manager.get_globe_renderer() if self._subsystem_manager else None
+    
+    def get_camera_controller(self):
+        """Get camera controller instance.""" 
+        return self._subsystem_manager.get_camera_controller() if self._subsystem_manager else None
+    
     def shutdown(self) -> None:
         """Cleanup graphics resources."""
+        if self._subsystem_manager:
+            self._subsystem_manager.shutdown_all()
         if self._render_task and self._panda_app:
             self._panda_app.taskMgr.remove(self._render_task)
         if self._panda_app:
