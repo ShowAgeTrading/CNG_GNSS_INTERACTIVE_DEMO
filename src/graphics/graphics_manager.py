@@ -20,8 +20,6 @@ References:
 TODO/FIXME:
     - Add viewport manager support (Priority: Medium)
     - Performance optimization for Intel Iris (Priority: High)
-
-Line Count: 180/200 (Soft Limit: 180)
 """
 
 import sys
@@ -36,10 +34,21 @@ from panda3d.core import (
     PythonTask
 )
 
-from ..core.component_interface import ComponentInterface
-from ..core.event_bus import Event
+try:
+    from ..core.component_interface import ComponentInterface
+    from ..core.event_bus import Event
+except ImportError:
+    # Fallback for when running tests directly
+    import sys
+    from pathlib import Path
+    src_path = Path(__file__).parent.parent
+    if str(src_path) not in sys.path:
+        sys.path.insert(0, str(src_path))
+    from core.component_interface import ComponentInterface
+    from core.event_bus import Event
 from .subsystem_factory import SubsystemFactory
 from .panda3d_initializer import Panda3DInitializer
+from .utils.graphics_utils import PerformanceMonitor
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +70,9 @@ class GraphicsManager(ComponentInterface, DirectObject):
         # Core Panda3D components
         self._panda_app: Optional[ShowBase] = None
         self._render_task: Optional[PythonTask] = None
-        self._performance_stats: Dict[str, float] = {}
+        
+        # Performance monitoring
+        self._performance_monitor = PerformanceMonitor()
         
         # Graphics subsystem components
         self._globe_renderer = None
@@ -80,6 +91,11 @@ class GraphicsManager(ComponentInterface, DirectObject):
         self._target_fps = 60.0
         self._initialized = False
     
+    @property
+    def name(self) -> str:
+        """Component name for identification."""
+        return "GraphicsManager"
+    
     def initialize(self, app) -> bool:
         """Initialize Panda3D and all graphics subsystems."""
         try:
@@ -93,7 +109,7 @@ class GraphicsManager(ComponentInterface, DirectObject):
                 return False
             
             # Initialize subsystem factory
-            assets_path = app.get_config().get('assets_path', Path.cwd() / 'assets')
+            assets_path = app.config.get('assets_path', Path.cwd() / 'assets')
             self._subsystem_factory = SubsystemFactory(assets_path, self._panda_app)
             
             # Initialize graphics subsystems using factory
@@ -106,9 +122,6 @@ class GraphicsManager(ComponentInterface, DirectObject):
             
             # Set up render loop task
             self._setup_render_task()
-            
-            # Initialize performance monitoring
-            self._initialize_performance_monitoring()
             
             self._initialized = True
             logger.info("Graphics manager initialized successfully")
@@ -156,23 +169,12 @@ class GraphicsManager(ComponentInterface, DirectObject):
         """Main render frame task - called every frame."""
         try:
             dt = task.time - task.last if hasattr(task, 'last') else 0.0
-            self._update_performance_stats(dt)
+            self._performance_monitor.update_performance_stats(dt)
             task.last = task.time
             return task.cont
         except Exception as e:
             logger.error(f"Error in render task: {e}")
             return task.done
-    
-    def _initialize_performance_monitoring(self) -> None:
-        """Initialize performance monitoring systems."""
-        self._performance_stats = {
-            'frame_time': 0.0, 'fps': 0.0, 'memory_usage': 0.0, 'texture_memory': 0.0
-        }
-    
-    def _update_performance_stats(self, delta_time: float) -> None:
-        """Update performance statistics."""
-        self._performance_stats['frame_time'] = delta_time
-        self._performance_stats['fps'] = 1.0 / delta_time if delta_time > 0 else 0.0
     
     def update(self, delta_time: float) -> None:
         """Update graphics system each frame."""
@@ -183,11 +185,20 @@ class GraphicsManager(ComponentInterface, DirectObject):
         """Process graphics-related events."""
         if not self._initialized:
             return
-        if event.category == "time":
+        
+        # Parse event type (format: "category.action" or "category.action.detail")
+        event_parts = event.event_type.split('.')
+        if len(event_parts) < 2:
+            return
+            
+        category = event_parts[0]
+        action = event_parts[1]
+        
+        if category == "time":
             pass  # Handle time-based updates
-        elif event.category == "config" and "graphics" in event.action:
+        elif category == "config" and action == "graphics":
             self._handle_config_change(event.data)
-        elif event.category == "user" and event.action == "input":
+        elif category == "user" and action == "input":
             pass  # Handle user input for camera
     
     def _handle_config_change(self, config_data: Dict[str, Any]) -> None:
@@ -196,7 +207,7 @@ class GraphicsManager(ComponentInterface, DirectObject):
     
     def get_performance_stats(self) -> Dict[str, float]:
         """Get current performance statistics."""
-        return self._performance_stats.copy()
+        return self._performance_monitor.get_all_stats()
     
     def shutdown(self) -> None:
         """Cleanup graphics resources."""
@@ -206,6 +217,3 @@ class GraphicsManager(ComponentInterface, DirectObject):
             self._panda_app.destroy()
             self._panda_app = None
         self._initialized = False
-
-
-# Line count: Under 229 lines
