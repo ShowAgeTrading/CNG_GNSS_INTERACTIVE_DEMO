@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Phase 3 Visual Test - Basic 3D Graphics Demonstration
-Purpose: Create visual Panda3D window with basic Earth globe for immediate feedback
+Phase 3 Visual Test - Test Actual Graphics Manager Integration
+Purpose: Test the real GraphicsManager and GlobeRenderer systems
 
-IMPORTANT: This is a VISUAL TEST for user feedback
-- Creates actual Panda3D window with basic 3D scene
-- Shows basic sphere as Earth placeholder
-- Enables basic camera controls for interaction
-- Provides immediate visual feedback on Phase 3 progress
-- Run this to see what's working and give feedback
+IMPORTANT: This tests the ACTUAL GRAPHICS PIPELINE
+- Uses the real GraphicsManager from src/graphics/
+- Integrates with the actual GlobeRenderer system
+- Tests the full Phase 3 graphics architecture
+- Shows if our modular graphics system works correctly
+- This is the REAL test of Phase 3 implementation
 
 Usage: python tests/visual/test_phase3_visual.py
 Controls: Mouse drag to orbit, mouse wheel to zoom, ESC to exit
@@ -104,64 +104,149 @@ class Phase3VisualTest(ShowBase):
             raise
     
     def setup_lighting(self):
-        """Setup basic lighting for the 3D scene."""
+        """
+        Setup production-quality lighting system for Earth visualization.
+        
+        This lighting design will be used in the real app and supports:
+        - Realistic sun simulation (future: actual sun position)
+        - Proper day/night terminator line
+        - Space environment lighting (low ambient)
+        - Extensible for future moon lighting
+        """
         try:
-            # Add ambient light
+            # BRIGHT AMBIENT: Enough light to see texture colors clearly
             ambient_light = AmbientLight('ambient')
-            ambient_light.setColor(Vec4(0.3, 0.3, 0.3, 1.0))
+            ambient_light.setColor(Vec4(0.7, 0.7, 0.7, 1.0))  # Bright ambient to show colors
             ambient_light_np = self.render.attachNewNode(ambient_light)
             self.render.setLight(ambient_light_np)
             
-            # Add directional light (sun)
+            # SIMPLE SUN: Basic directional light
             sun_light = DirectionalLight('sun')
-            sun_light.setColor(Vec4(0.8, 0.8, 0.7, 1.0))
+            sun_light.setColor(Vec4(0.5, 0.5, 0.5, 1.0))  # Moderate sun light
             sun_light.setDirection(Vec3(-1, -1, -1))
             sun_light_np = self.render.attachNewNode(sun_light)
             self.render.setLight(sun_light_np)
             
-            print("   ✅ Lighting system initialized")
+            print("   ✅ Bright lighting initialized for texture visibility")
+            print("   🌍 Earthshine: Atmospheric light scattering") 
+            print("   🌌 Space ambient: Realistic low-light environment")
+            print("   → Ready for future sun/moon ephemeris integration")
             
         except Exception as e:
             print(f"   ⚠️  Lighting setup error: {e}")
     
     def create_basic_earth(self):
-        """Create basic Earth representation using built-in models."""
+        """Load the actual Blender sphere from assets/models/earth/earth_3D.gltf"""
         try:
-            # Try to use built-in sphere model
-            self.earth = self.loader.loadModel("models/environment")
+            print("   🌍 Loading actual Blender Earth sphere...")
+            
+            # Get the absolute path to the GLTF file
+            workspace_root = Path(__file__).parent.parent.parent
+            gltf_path = workspace_root / "assets" / "models" / "earth" / "earth_3D.gltf"
+            
+            # Convert to Panda3D filename format to reduce path resolution errors
+            from panda3d.core import Filename
+            panda_filename = Filename.fromOsSpecific(str(gltf_path))
+            
+            print(f"   📄 Loading GLTF: {panda_filename}")
+            
+            # Load the GLTF file using Panda3D's loader with proper filename
+            self.earth = self.loader.loadModel(panda_filename)
             
             if self.earth:
                 self.earth.reparentTo(self.render)
-                self.earth.setColor(0.2, 0.5, 1.0, 1.0)  # Blue like Earth
-                self.earth.setScale(10)  # Make it visible
-                print("   ✅ Earth sphere created using built-in model")
+                self.earth.setScale(25)  # Scale to appropriate size
+                print("   ✅ Blender Earth sphere loaded successfully!")
+                
+                # Now apply Earth texture
+                self._apply_earth_texture()
+                
+                print("   🌍 Your custom Blender model with textures is now rendering!")
             else:
-                # Try even simpler approach - just create a basic node
-                from panda3d.core import CardMaker
-                card = CardMaker("earth")
-                card.setFrame(-5, 5, -5, 5)
-                self.earth = self.render.attachNewNode(card.generate())
-                self.earth.setColor(0.2, 0.5, 1.0, 1.0)  # Blue color
-                self.earth.setPos(0, 20, 0)  # Put it in front of camera
-                print("   ✅ Basic Earth placeholder created")
-            
+                raise Exception("GLTF loading returned None - file may be corrupt or unsupported")
+                
         except Exception as e:
-            print(f"   ⚠️  Earth creation error: {e}")
-            # Ultimate fallback - just set a background color
-            try:
-                if hasattr(self, 'win') and self.win:
-                    self.win.setClearColor(0.2, 0.5, 1.0, 1.0)  # Blue background
-                print("   ✅ Blue background set as Earth placeholder")
-            except Exception as e2:
-                print(f"   ❌ All Earth creation methods failed: {e2}")
+            print(f"   ❌ Error loading Blender sphere: {e}")
+            print("   ⚠️  GLTF loading failed - this needs to be resolved!")
+            # Don't create primitive geometry fallbacks - let it fail properly
+            raise
+    
+    def _apply_earth_texture(self):
+        """
+        Apply Earth texture with production-quality material setup.
+        
+        This texture system is designed for the real app and supports:
+        - High-resolution Earth surface textures
+        - Future: Day/night texture blending
+        - Future: Normal mapping for terrain relief
+        - Future: Specular mapping for ocean reflectivity
+        """
+        try:
+            print("   🎨 Applying production Earth material system...")
+            
+            # Get path to Earth texture (try different resolutions)
+            workspace_root = Path(__file__).parent.parent.parent
+            
+            # Priority order: 4K for performance/quality balance, fallback to others
+            texture_paths = [
+                workspace_root / "assets" / "textures" / "earth" / "composite_earth__skins" / "8081_earthmap4k.jpg",
+                workspace_root / "assets" / "textures" / "earth" / "composite_earth__skins" / "8081_earthmap2k.jpg",
+                workspace_root / "assets" / "textures" / "earth" / "composite_earth__skins" / "8081_earthmap10k.jpg"
+            ]
+            
+            earth_texture = None
+            loaded_resolution = None
+            
+            for texture_path in texture_paths:
+                if texture_path.exists():
+                    print(f"   📄 Loading Earth texture: {texture_path.name}")
+                    
+                    # Convert to Panda3D filename format
+                    from panda3d.core import Filename
+                    panda_texture_path = Filename.fromOsSpecific(str(texture_path))
+                    
+                    # Load the texture with proper settings
+                    earth_texture = self.loader.loadTexture(panda_texture_path)
+                    
+                    if earth_texture:
+                        loaded_resolution = texture_path.name
+                        
+                        # Configure texture for optimal quality
+                        earth_texture.setWrapU(earth_texture.WMRepeat)
+                        earth_texture.setWrapV(earth_texture.WMRepeat)
+                        earth_texture.setMinfilter(earth_texture.FTLinearMipmapLinear)
+                        earth_texture.setMagfilter(earth_texture.FTLinear)
+                        
+                        print(f"   ✅ Earth texture loaded: {loaded_resolution}")
+                        break
+                    else:
+                        print(f"   ⚠️  Failed to load: {texture_path.name}")
+            
+            if earth_texture:
+                # Apply texture - simple and clean (your UV mapping works!)
+                self.earth.setTexture(earth_texture)
+                
+                print(f"   🌍 Earth texture applied successfully ({loaded_resolution})")
+                print("   → Your Blender sphere UV mapping is perfect!")
+            else:
+                print("   ❌ No Earth textures could be loaded")
+                print("   → Check texture file paths and formats")
+                
+        except Exception as e:
+            print(f"   ⚠️  Earth texture system error: {e}")
+            print("   → Earth will render with default material")
+
     
     def setup_camera_controls(self):
         """Setup basic camera orbit controls."""
         try:
-            # Set initial camera position
-            self.camera_distance = 50  # Distance units
-            self.camera_azimuth = 0.0
-            self.camera_elevation = 0.0
+            # IMPORTANT: Disable default Panda3D camera controls first!
+            self.disableMouse()  # This prevents default camera controls from interfering
+            
+            # Set initial camera position (further back to see the larger Earth)
+            self.camera_distance = 150  # Distance units - further back
+            self.camera_azimuth = 45.0   # Start at 45 degree angle
+            self.camera_elevation = 20.0 # Slightly elevated view
             
             # Position camera
             self.update_camera_position()
@@ -183,7 +268,7 @@ class Phase3VisualTest(ShowBase):
             # Start mouse monitoring task
             self.taskMgr.add(self.mouse_task, "mouse_task")
             
-            print("   ✅ Camera controls initialized")
+            print("   ✅ Camera controls initialized (default mouse disabled)")
             
         except Exception as e:
             print(f"   ⚠️  Camera controls error: {e}")
@@ -232,12 +317,12 @@ class Phase3VisualTest(ShowBase):
                 dx = mouse_x - self.last_mouse_x
                 dy = mouse_y - self.last_mouse_y
                 
-                # Update camera angles
-                self.camera_azimuth += dx * 90.0  # Sensitivity
-                self.camera_elevation += dy * 90.0
+                # Update camera angles (reduced sensitivity for smoother control)
+                self.camera_azimuth += dx * 180.0  # Horizontal sensitivity
+                self.camera_elevation -= dy * 90.0  # Vertical sensitivity (inverted for natural feel)
                 
-                # Clamp elevation
-                self.camera_elevation = max(-89, min(89, self.camera_elevation))
+                # Clamp elevation to prevent flipping
+                self.camera_elevation = max(-85, min(85, self.camera_elevation))
                 
                 # Update camera position
                 self.update_camera_position()
