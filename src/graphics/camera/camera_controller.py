@@ -65,10 +65,8 @@ class CameraController(DirectObject):
         """Initialize camera controller with default position."""
         try:
             # Set initial camera position (view Earth from space)
-            self._update_camera_position()
-            
-            # Look at Earth center
-            self._camera.lookAt(0, 0, 0)
+            if not self._update_camera_position():
+                return False
             
             # Enable mouse controls (basic implementation)
             self._setup_basic_controls()
@@ -93,20 +91,29 @@ class CameraController(DirectObject):
         self.accept('arrow_up', self._rotate_up)
         self.accept('arrow_down', self._rotate_down)
     
-    def _update_camera_position(self) -> None:
+    def _update_camera_position(self) -> bool:
         """Update camera position based on spherical coordinates."""
         import math
         
-        # Convert spherical to cartesian coordinates
-        x = self._distance * math.cos(math.radians(self._elevation)) * math.cos(math.radians(self._azimuth))
-        y = self._distance * math.cos(math.radians(self._elevation)) * math.sin(math.radians(self._azimuth))
-        z = self._distance * math.sin(math.radians(self._elevation))
-        
-        if apply_transform:
-            apply_transform(self._camera, position=(x, y, z))
-        else:
-            self._camera.setPos(x, y, z)
-        self._camera.lookAt(0, 0, 0)
+        try:
+            # Convert spherical to cartesian coordinates
+            x = self._distance * math.cos(math.radians(self._elevation)) * math.cos(math.radians(self._azimuth))
+            y = self._distance * math.cos(math.radians(self._elevation)) * math.sin(math.radians(self._azimuth))
+            z = self._distance * math.sin(math.radians(self._elevation))
+            
+            if apply_transform:
+                success = apply_transform(self._camera, position=(x, y, z))
+                if not success:
+                    return False
+            else:
+                self._camera.setPos(x, y, z)
+            
+            self._camera.lookAt(0, 0, 0)
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to update camera position: {e}")
+            return False
     
     def _zoom_in(self) -> None:
         """Zoom camera closer to Earth."""
