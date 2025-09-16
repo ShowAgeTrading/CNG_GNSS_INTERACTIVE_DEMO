@@ -1,0 +1,1 @@
+This is derived from USGS DEM data, with the addition of the Arctic ice areas which do not show up on USGS data (since they are not solid land masses.) Use this to control specularity and reflectance of the ocean surface.

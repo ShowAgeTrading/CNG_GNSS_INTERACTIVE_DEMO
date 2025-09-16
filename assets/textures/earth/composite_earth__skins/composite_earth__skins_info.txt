@@ -1,0 +1,1 @@
+This map is a synthesis between my original earth map, gradient mapping of the USGS DEM information, hand painting, DEM modulation of detail, bathyspheric depth information, and the USGS Ocean clip. Bathyspheric data was used to modulate the color of the water so that deeper areas are a darker blue than shallow areas.
