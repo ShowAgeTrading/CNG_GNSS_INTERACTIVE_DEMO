@@ -1,5 +1,5 @@
 # Test Behavior Analysis Report
-**Generated:** 2025-09-17T09:44:33.091684  
+**Generated:** 2025-09-17T12:28:43.328428  
 **Purpose:** Compare visual test success vs production failure paths
 
 ---
