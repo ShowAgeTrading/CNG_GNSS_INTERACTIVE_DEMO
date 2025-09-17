@@ -41,7 +41,11 @@ class HotReloadManager:
     - Error recovery
     """
     
-    def __init__(self, event_bus: EventBus):
+    def __init__(self, event_bus: Optional['EventBus'] = None):
+        if event_bus is None:
+            from .event_bus import EventBus
+            event_bus = EventBus()
+        
         self._event_bus = event_bus
         self._watchers: Dict[str, Any] = {}
         self._loaded_modules: Dict[str, ModuleInfo] = {}
