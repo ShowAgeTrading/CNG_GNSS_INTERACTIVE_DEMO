@@ -26,7 +26,11 @@ class LoggingManager:
     - Dynamic log level control
     """
     
-    def __init__(self, event_bus: EventBus, logs_dir: str = "logs"):
+    def __init__(self, event_bus: Optional['EventBus'] = None, logs_dir: str = "logs"):
+        if event_bus is None:
+            from .event_bus import EventBus
+            event_bus = EventBus()
+        
         self._event_bus = event_bus
         self._logs_dir = Path(logs_dir)
         self._loggers: Dict[str, logging.Logger] = {}
