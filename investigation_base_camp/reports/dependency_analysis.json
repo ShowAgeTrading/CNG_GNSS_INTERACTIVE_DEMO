@@ -1,0 +1,1756 @@
+{
+  "timestamp": "2025-09-17",
+  "workspace_root": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO",
+  "src_modules_analyzed": [
+    "graphics.config_manager",
+    "graphics.event_handler",
+    "graphics.globe",
+    "graphics.graphics_manager",
+    "graphics.panda3d_initializer",
+    "graphics.subsystem_factory",
+    "graphics.subsystem_manager",
+    "graphics.camera.camera_controller",
+    "graphics.globe.coordinate_system",
+    "graphics.globe.coordinate_validation",
+    "graphics.globe.globe_renderer",
+    "graphics.globe.globe_setup",
+    "graphics.globe.material_manager",
+    "graphics.globe.model_loader",
+    "graphics.globe.texture_manager",
+    "graphics.utils.asset_manager",
+    "graphics.utils.graphics_utils",
+    "graphics.utils.panda3d_utils"
+  ],
+  "import_chains": {
+    "graphics.config_manager": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\config_manager.py",
+      "direct_imports": [
+        {
+          "type": "from_import",
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "line": 12
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Tuple"
+          ],
+          "line": 13
+        }
+      ],
+      "import_success": {
+        "pathlib": true,
+        "typing": true
+      },
+      "import_errors": {}
+    },
+    "graphics.event_handler": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\event_handler.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 16
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Dict",
+            "Any",
+            "Optional",
+            "Tuple"
+          ],
+          "line": 17
+        },
+        {
+          "type": "from_import",
+          "module": "core.event_bus",
+          "names": [
+            "Event"
+          ],
+          "line": 20
+        },
+        {
+          "type": "from_import",
+          "module": "core.event_bus",
+          "names": [
+            "Event"
+          ],
+          "line": 22
+        }
+      ],
+      "import_success": {
+        "logging": true,
+        "typing": true,
+        "core.event_bus": true
+      },
+      "import_errors": {}
+    },
+    "graphics.globe": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\globe.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "numpy",
+          "alias": "np",
+          "line": 24
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional",
+            "Tuple"
+          ],
+          "line": 25
+        },
+        {
+          "type": "from_import",
+          "module": "globe.globe_renderer",
+          "names": [
+            "GlobeRenderer"
+          ],
+          "line": 28
+        },
+        {
+          "type": "from_import",
+          "module": "globe.coordinate_system",
+          "names": [
+            "CoordinateSystem"
+          ],
+          "line": 29
+        }
+      ],
+      "import_success": {
+        "numpy": true,
+        "typing": true
+      },
+      "import_errors": {
+        "globe.globe_renderer": {
+          "module": "graphics.globe",
+          "failed_import": "globe.globe_renderer",
+          "import_type": "from_import",
+          "error": "No module named 'globe'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "globe.coordinate_system": {
+          "module": "graphics.globe",
+          "failed_import": "globe.coordinate_system",
+          "import_type": "from_import",
+          "error": "No module named 'globe'",
+          "error_type": "ModuleNotFoundError"
+        }
+      }
+    },
+    "graphics.graphics_manager": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\graphics_manager.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "sys",
+          "alias": null,
+          "line": 25
+        },
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 26
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional",
+            "Dict",
+            "Any"
+          ],
+          "line": 27
+        },
+        {
+          "type": "from_import",
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "line": 28
+        },
+        {
+          "type": "from_import",
+          "module": "subsystem_factory",
+          "names": [
+            "SubsystemFactory"
+          ],
+          "line": 66
+        },
+        {
+          "type": "from_import",
+          "module": "panda3d_initializer",
+          "names": [
+            "Panda3DInitializer"
+          ],
+          "line": 67
+        },
+        {
+          "type": "from_import",
+          "module": "utils.graphics_utils",
+          "names": [
+            "PerformanceMonitor"
+          ],
+          "line": 68
+        },
+        {
+          "type": "from_import",
+          "module": "event_handler",
+          "names": [
+            "GraphicsEventHandler"
+          ],
+          "line": 69
+        },
+        {
+          "type": "from_import",
+          "module": "subsystem_manager",
+          "names": [
+            "GraphicsSubsystemManager"
+          ],
+          "line": 70
+        },
+        {
+          "type": "from_import",
+          "module": "config_manager",
+          "names": [
+            "GraphicsConfigManager"
+          ],
+          "line": 71
+        },
+        {
+          "type": "from_import",
+          "module": "direct.showbase.ShowBase",
+          "names": [
+            "ShowBase"
+          ],
+          "line": 31
+        },
+        {
+          "type": "from_import",
+          "module": "direct.showbase.DirectObject",
+          "names": [
+            "DirectObject"
+          ],
+          "line": 32
+        },
+        {
+          "type": "from_import",
+          "module": "panda3d.core",
+          "names": [
+            "WindowProperties",
+            "FrameBufferProperties",
+            "PythonTask"
+          ],
+          "line": 33
+        },
+        {
+          "type": "from_import",
+          "module": "core.component_interface",
+          "names": [
+            "ComponentInterface"
+          ],
+          "line": 55
+        },
+        {
+          "type": "from_import",
+          "module": "core.event_bus",
+          "names": [
+            "Event"
+          ],
+          "line": 56
+        },
+        {
+          "type": "import",
+          "module": "sys",
+          "alias": null,
+          "line": 59
+        },
+        {
+          "type": "from_import",
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "line": 60
+        },
+        {
+          "type": "from_import",
+          "module": "core.component_interface",
+          "names": [
+            "ComponentInterface"
+          ],
+          "line": 64
+        },
+        {
+          "type": "from_import",
+          "module": "core.event_bus",
+          "names": [
+            "Event"
+          ],
+          "line": 65
+        }
+      ],
+      "import_success": {
+        "sys": true,
+        "logging": true,
+        "typing": true,
+        "pathlib": true,
+        "direct.showbase.ShowBase": true,
+        "direct.showbase.DirectObject": true,
+        "panda3d.core": true,
+        "core.component_interface": true,
+        "core.event_bus": true
+      },
+      "import_errors": {
+        "subsystem_factory": {
+          "module": "graphics.graphics_manager",
+          "failed_import": "subsystem_factory",
+          "import_type": "from_import",
+          "error": "No module named 'subsystem_factory'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "panda3d_initializer": {
+          "module": "graphics.graphics_manager",
+          "failed_import": "panda3d_initializer",
+          "import_type": "from_import",
+          "error": "No module named 'panda3d_initializer'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "utils.graphics_utils": {
+          "module": "graphics.graphics_manager",
+          "failed_import": "utils.graphics_utils",
+          "import_type": "from_import",
+          "error": "No module named 'utils.graphics_utils'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "event_handler": {
+          "module": "graphics.graphics_manager",
+          "failed_import": "event_handler",
+          "import_type": "from_import",
+          "error": "No module named 'event_handler'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "subsystem_manager": {
+          "module": "graphics.graphics_manager",
+          "failed_import": "subsystem_manager",
+          "import_type": "from_import",
+          "error": "No module named 'subsystem_manager'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "config_manager": {
+          "module": "graphics.graphics_manager",
+          "failed_import": "config_manager",
+          "import_type": "from_import",
+          "error": "No module named 'config_manager'",
+          "error_type": "ModuleNotFoundError"
+        }
+      }
+    },
+    "graphics.panda3d_initializer": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\panda3d_initializer.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 21
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional",
+            "Tuple"
+          ],
+          "line": 22
+        },
+        {
+          "type": "from_import",
+          "module": "direct.showbase.ShowBase",
+          "names": [
+            "ShowBase"
+          ],
+          "line": 25
+        },
+        {
+          "type": "from_import",
+          "module": "panda3d.core",
+          "names": [
+            "WindowProperties",
+            "FrameBufferProperties"
+          ],
+          "line": 26
+        }
+      ],
+      "import_success": {
+        "logging": true,
+        "typing": true,
+        "direct.showbase.ShowBase": true,
+        "panda3d.core": true
+      },
+      "import_errors": {}
+    },
+    "graphics.subsystem_factory": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\subsystem_factory.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 27
+        },
+        {
+          "type": "from_import",
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "line": 28
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional"
+          ],
+          "line": 29
+        },
+        {
+          "type": "from_import",
+          "module": "globe.globe_renderer",
+          "names": [
+            "GlobeRenderer"
+          ],
+          "line": 49
+        },
+        {
+          "type": "from_import",
+          "module": "camera.camera_controller",
+          "names": [
+            "CameraController"
+          ],
+          "line": 70
+        }
+      ],
+      "import_success": {
+        "logging": true,
+        "pathlib": true,
+        "typing": true
+      },
+      "import_errors": {
+        "globe.globe_renderer": {
+          "module": "graphics.subsystem_factory",
+          "failed_import": "globe.globe_renderer",
+          "import_type": "from_import",
+          "error": "No module named 'globe'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "camera.camera_controller": {
+          "module": "graphics.subsystem_factory",
+          "failed_import": "camera.camera_controller",
+          "import_type": "from_import",
+          "error": "No module named 'camera'",
+          "error_type": "ModuleNotFoundError"
+        }
+      }
+    },
+    "graphics.subsystem_manager": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\subsystem_manager.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 13
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional"
+          ],
+          "line": 14
+        }
+      ],
+      "import_success": {
+        "logging": true,
+        "typing": true
+      },
+      "import_errors": {}
+    },
+    "graphics.camera.camera_controller": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\camera\\camera_controller.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 26
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional"
+          ],
+          "line": 27
+        },
+        {
+          "type": "from_import",
+          "module": "panda3d.core",
+          "names": [
+            "Vec3",
+            "Camera"
+          ],
+          "line": 29
+        },
+        {
+          "type": "from_import",
+          "module": "direct.showbase.DirectObject",
+          "names": [
+            "DirectObject"
+          ],
+          "line": 30
+        },
+        {
+          "type": "from_import",
+          "module": "utils.panda3d_utils",
+          "names": [
+            "apply_transform"
+          ],
+          "line": 33
+        },
+        {
+          "type": "import",
+          "module": "math",
+          "alias": null,
+          "line": 96
+        }
+      ],
+      "import_success": {
+        "logging": true,
+        "typing": true,
+        "panda3d.core": true,
+        "direct.showbase.DirectObject": true,
+        "math": true
+      },
+      "import_errors": {
+        "utils.panda3d_utils": {
+          "module": "graphics.camera.camera_controller",
+          "failed_import": "utils.panda3d_utils",
+          "import_type": "from_import",
+          "error": "No module named 'utils.panda3d_utils'",
+          "error_type": "ModuleNotFoundError"
+        }
+      }
+    },
+    "graphics.globe.coordinate_system": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\globe\\coordinate_system.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "math",
+          "alias": null,
+          "line": 27
+        },
+        {
+          "type": "import",
+          "module": "numpy",
+          "alias": "np",
+          "line": 28
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Tuple"
+          ],
+          "line": 29
+        },
+        {
+          "type": "from_import",
+          "module": "panda3d.core",
+          "names": [
+            "Vec3",
+            "Mat4",
+            "TransformState"
+          ],
+          "line": 31
+        },
+        {
+          "type": "from_import",
+          "module": "coordinate_validation",
+          "names": [
+            "CoordinateValidator"
+          ],
+          "line": 32
+        }
+      ],
+      "import_success": {
+        "math": true,
+        "numpy": true,
+        "typing": true,
+        "panda3d.core": true
+      },
+      "import_errors": {
+        "coordinate_validation": {
+          "module": "graphics.globe.coordinate_system",
+          "failed_import": "coordinate_validation",
+          "import_type": "from_import",
+          "error": "No module named 'coordinate_validation'",
+          "error_type": "ModuleNotFoundError"
+        }
+      }
+    },
+    "graphics.globe.coordinate_validation": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\globe\\coordinate_validation.py",
+      "direct_imports": [
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Tuple"
+          ],
+          "line": 13
+        }
+      ],
+      "import_success": {
+        "typing": true
+      },
+      "import_errors": {}
+    },
+    "graphics.globe.globe_renderer": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\globe\\globe_renderer.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 28
+        },
+        {
+          "type": "from_import",
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "line": 29
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional",
+            "Dict"
+          ],
+          "line": 30
+        },
+        {
+          "type": "from_import",
+          "module": "panda3d.core",
+          "names": [
+            "NodePath",
+            "Texture",
+            "Vec3"
+          ],
+          "line": 32
+        },
+        {
+          "type": "from_import",
+          "module": "direct.showbase.DirectObject",
+          "names": [
+            "DirectObject"
+          ],
+          "line": 35
+        },
+        {
+          "type": "from_import",
+          "module": "texture_manager",
+          "names": [
+            "TextureManager"
+          ],
+          "line": 37
+        },
+        {
+          "type": "from_import",
+          "module": "coordinate_system",
+          "names": [
+            "CoordinateSystem"
+          ],
+          "line": 38
+        },
+        {
+          "type": "from_import",
+          "module": "material_manager",
+          "names": [
+            "MaterialManager"
+          ],
+          "line": 39
+        },
+        {
+          "type": "from_import",
+          "module": "model_loader",
+          "names": [
+            "ModelLoader"
+          ],
+          "line": 40
+        },
+        {
+          "type": "from_import",
+          "module": "globe_setup",
+          "names": [
+            "GlobeSetupOrchestrator"
+          ],
+          "line": 41
+        },
+        {
+          "type": "from_import",
+          "module": "utils.asset_manager",
+          "names": [
+            "AssetManager"
+          ],
+          "line": 45
+        },
+        {
+          "type": "from_import",
+          "module": "utils.panda3d_utils",
+          "names": [
+            "apply_transform"
+          ],
+          "line": 46
+        },
+        {
+          "type": "import",
+          "module": "sys",
+          "alias": null,
+          "line": 49
+        },
+        {
+          "type": "from_import",
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "line": 50
+        },
+        {
+          "type": "from_import",
+          "module": "graphics.utils.asset_manager",
+          "names": [
+            "AssetManager"
+          ],
+          "line": 54
+        }
+      ],
+      "import_success": {
+        "logging": true,
+        "pathlib": true,
+        "typing": true,
+        "panda3d.core": true,
+        "direct.showbase.DirectObject": true,
+        "sys": true,
+        "graphics.utils.asset_manager": true
+      },
+      "import_errors": {
+        "texture_manager": {
+          "module": "graphics.globe.globe_renderer",
+          "failed_import": "texture_manager",
+          "import_type": "from_import",
+          "error": "No module named 'texture_manager'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "coordinate_system": {
+          "module": "graphics.globe.globe_renderer",
+          "failed_import": "coordinate_system",
+          "import_type": "from_import",
+          "error": "No module named 'coordinate_system'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "material_manager": {
+          "module": "graphics.globe.globe_renderer",
+          "failed_import": "material_manager",
+          "import_type": "from_import",
+          "error": "No module named 'material_manager'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "model_loader": {
+          "module": "graphics.globe.globe_renderer",
+          "failed_import": "model_loader",
+          "import_type": "from_import",
+          "error": "No module named 'model_loader'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "globe_setup": {
+          "module": "graphics.globe.globe_renderer",
+          "failed_import": "globe_setup",
+          "import_type": "from_import",
+          "error": "No module named 'globe_setup'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "utils.asset_manager": {
+          "module": "graphics.globe.globe_renderer",
+          "failed_import": "utils.asset_manager",
+          "import_type": "from_import",
+          "error": "No module named 'utils.asset_manager'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "utils.panda3d_utils": {
+          "module": "graphics.globe.globe_renderer",
+          "failed_import": "utils.panda3d_utils",
+          "import_type": "from_import",
+          "error": "No module named 'utils.panda3d_utils'",
+          "error_type": "ModuleNotFoundError"
+        }
+      }
+    },
+    "graphics.globe.globe_setup": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\globe\\globe_setup.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 13
+        },
+        {
+          "type": "from_import",
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "line": 14
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Dict",
+            "Optional"
+          ],
+          "line": 15
+        },
+        {
+          "type": "from_import",
+          "module": "panda3d.core",
+          "names": [
+            "NodePath",
+            "Texture"
+          ],
+          "line": 17
+        }
+      ],
+      "import_success": {
+        "logging": true,
+        "pathlib": true,
+        "typing": true,
+        "panda3d.core": true
+      },
+      "import_errors": {}
+    },
+    "graphics.globe.material_manager": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\globe\\material_manager.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 25
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional",
+            "Dict"
+          ],
+          "line": 26
+        },
+        {
+          "type": "from_import",
+          "module": "panda3d.core",
+          "names": [
+            "NodePath",
+            "Material",
+            "TextureStage",
+            "Texture",
+            "ShadeModelAttrib",
+            "Vec3"
+          ],
+          "line": 28
+        }
+      ],
+      "import_success": {
+        "logging": true,
+        "typing": true,
+        "panda3d.core": true
+      },
+      "import_errors": {}
+    },
+    "graphics.globe.model_loader": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\globe\\model_loader.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 26
+        },
+        {
+          "type": "from_import",
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "line": 27
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional"
+          ],
+          "line": 28
+        },
+        {
+          "type": "from_import",
+          "module": "panda3d.core",
+          "names": [
+            "NodePath"
+          ],
+          "line": 30
+        },
+        {
+          "type": "from_import",
+          "module": "gltf",
+          "names": [
+            "load_model"
+          ],
+          "line": 31
+        },
+        {
+          "type": "from_import",
+          "module": "utils.panda3d_utils",
+          "names": [
+            "setup_node",
+            "apply_transform"
+          ],
+          "line": 32
+        }
+      ],
+      "import_success": {
+        "logging": true,
+        "pathlib": true,
+        "typing": true,
+        "panda3d.core": true
+      },
+      "import_errors": {
+        "gltf": {
+          "module": "graphics.globe.model_loader",
+          "failed_import": "gltf",
+          "import_type": "from_import",
+          "error": "No module named 'gltf'",
+          "error_type": "ModuleNotFoundError"
+        },
+        "utils.panda3d_utils": {
+          "module": "graphics.globe.model_loader",
+          "failed_import": "utils.panda3d_utils",
+          "import_type": "from_import",
+          "error": "No module named 'utils.panda3d_utils'",
+          "error_type": "ModuleNotFoundError"
+        }
+      }
+    },
+    "graphics.globe.texture_manager": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\globe\\texture_manager.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 23
+        },
+        {
+          "type": "from_import",
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "line": 24
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Dict",
+            "Optional",
+            "List"
+          ],
+          "line": 25
+        },
+        {
+          "type": "from_import",
+          "module": "panda3d.core",
+          "names": [
+            "Texture",
+            "TexturePool",
+            "PNMImage"
+          ],
+          "line": 27
+        },
+        {
+          "type": "from_import",
+          "module": "direct.task",
+          "names": [
+            "Task"
+          ],
+          "line": 28
+        },
+        {
+          "type": "from_import",
+          "module": "utils.asset_manager",
+          "names": [
+            "AssetManager"
+          ],
+          "line": 32
+        },
+        {
+          "type": "import",
+          "module": "sys",
+          "alias": null,
+          "line": 35
+        },
+        {
+          "type": "from_import",
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "line": 36
+        },
+        {
+          "type": "from_import",
+          "module": "graphics.utils.asset_manager",
+          "names": [
+            "AssetManager"
+          ],
+          "line": 40
+        }
+      ],
+      "import_success": {
+        "logging": true,
+        "pathlib": true,
+        "typing": true,
+        "panda3d.core": true,
+        "direct.task": true,
+        "sys": true,
+        "graphics.utils.asset_manager": true
+      },
+      "import_errors": {
+        "utils.asset_manager": {
+          "module": "graphics.globe.texture_manager",
+          "failed_import": "utils.asset_manager",
+          "import_type": "from_import",
+          "error": "No module named 'utils.asset_manager'",
+          "error_type": "ModuleNotFoundError"
+        }
+      }
+    },
+    "graphics.utils.asset_manager": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\utils\\asset_manager.py",
+      "direct_imports": [
+        {
+          "type": "from_import",
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "line": 8
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional",
+            "Dict",
+            "Any",
+            "List"
+          ],
+          "line": 9
+        },
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 10
+        }
+      ],
+      "import_success": {
+        "pathlib": true,
+        "typing": true,
+        "logging": true
+      },
+      "import_errors": {}
+    },
+    "graphics.utils.graphics_utils": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\utils\\graphics_utils.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "time",
+          "alias": null,
+          "line": 8
+        },
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 9
+        },
+        {
+          "type": "import",
+          "module": "gc",
+          "alias": null,
+          "line": 10
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional",
+            "Dict",
+            "Any"
+          ],
+          "line": 11
+        },
+        {
+          "type": "import",
+          "module": "psutil",
+          "alias": null,
+          "line": 15
+        }
+      ],
+      "import_success": {
+        "time": true,
+        "logging": true,
+        "gc": true,
+        "typing": true
+      },
+      "import_errors": {
+        "psutil": {
+          "module": "graphics.utils.graphics_utils",
+          "failed_import": "psutil",
+          "import_type": "import",
+          "error": "No module named 'psutil'",
+          "error_type": "ModuleNotFoundError"
+        }
+      }
+    },
+    "graphics.utils.panda3d_utils": {
+      "file_path": "C:\\AppDevelopment\\Superior Position\\CNG_GNSS_INTERACTIVE_DEMO\\src\\graphics\\utils\\panda3d_utils.py",
+      "direct_imports": [
+        {
+          "type": "import",
+          "module": "logging",
+          "alias": null,
+          "line": 8
+        },
+        {
+          "type": "from_import",
+          "module": "typing",
+          "names": [
+            "Optional",
+            "Any",
+            "Tuple"
+          ],
+          "line": 9
+        },
+        {
+          "type": "from_import",
+          "module": "panda3d.core",
+          "names": [
+            "NodePath",
+            "Vec3",
+            "Point3"
+          ],
+          "line": 12
+        }
+      ],
+      "import_success": {
+        "logging": true,
+        "typing": true,
+        "panda3d.core": true
+      },
+      "import_errors": {}
+    }
+  },
+  "broken_imports": [
+    {
+      "module": "graphics.globe",
+      "failed_import": "globe.globe_renderer",
+      "import_type": "from_import",
+      "error": "No module named 'globe'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe",
+      "failed_import": "globe.coordinate_system",
+      "import_type": "from_import",
+      "error": "No module named 'globe'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "failed_import": "subsystem_factory",
+      "import_type": "from_import",
+      "error": "No module named 'subsystem_factory'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "failed_import": "panda3d_initializer",
+      "import_type": "from_import",
+      "error": "No module named 'panda3d_initializer'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "failed_import": "utils.graphics_utils",
+      "import_type": "from_import",
+      "error": "No module named 'utils.graphics_utils'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "failed_import": "event_handler",
+      "import_type": "from_import",
+      "error": "No module named 'event_handler'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "failed_import": "subsystem_manager",
+      "import_type": "from_import",
+      "error": "No module named 'subsystem_manager'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "failed_import": "config_manager",
+      "import_type": "from_import",
+      "error": "No module named 'config_manager'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.subsystem_factory",
+      "failed_import": "globe.globe_renderer",
+      "import_type": "from_import",
+      "error": "No module named 'globe'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.subsystem_factory",
+      "failed_import": "camera.camera_controller",
+      "import_type": "from_import",
+      "error": "No module named 'camera'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.camera.camera_controller",
+      "failed_import": "utils.panda3d_utils",
+      "import_type": "from_import",
+      "error": "No module named 'utils.panda3d_utils'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe.coordinate_system",
+      "failed_import": "coordinate_validation",
+      "import_type": "from_import",
+      "error": "No module named 'coordinate_validation'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "failed_import": "texture_manager",
+      "import_type": "from_import",
+      "error": "No module named 'texture_manager'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "failed_import": "coordinate_system",
+      "import_type": "from_import",
+      "error": "No module named 'coordinate_system'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "failed_import": "material_manager",
+      "import_type": "from_import",
+      "error": "No module named 'material_manager'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "failed_import": "model_loader",
+      "import_type": "from_import",
+      "error": "No module named 'model_loader'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "failed_import": "globe_setup",
+      "import_type": "from_import",
+      "error": "No module named 'globe_setup'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "failed_import": "utils.asset_manager",
+      "import_type": "from_import",
+      "error": "No module named 'utils.asset_manager'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "failed_import": "utils.panda3d_utils",
+      "import_type": "from_import",
+      "error": "No module named 'utils.panda3d_utils'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe.model_loader",
+      "failed_import": "gltf",
+      "import_type": "from_import",
+      "error": "No module named 'gltf'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe.model_loader",
+      "failed_import": "utils.panda3d_utils",
+      "import_type": "from_import",
+      "error": "No module named 'utils.panda3d_utils'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.globe.texture_manager",
+      "failed_import": "utils.asset_manager",
+      "import_type": "from_import",
+      "error": "No module named 'utils.asset_manager'",
+      "error_type": "ModuleNotFoundError"
+    },
+    {
+      "module": "graphics.utils.graphics_utils",
+      "failed_import": "psutil",
+      "import_type": "import",
+      "error": "No module named 'psutil'",
+      "error_type": "ModuleNotFoundError"
+    }
+  ],
+  "working_imports": [
+    {
+      "module": "graphics.config_manager",
+      "import": "pathlib",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.config_manager",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.event_handler",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.event_handler",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.event_handler",
+      "import": "core.event_bus",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.event_handler",
+      "import": "core.event_bus",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe",
+      "import": "numpy",
+      "type": "import"
+    },
+    {
+      "module": "graphics.globe",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "sys",
+      "type": "import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "pathlib",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "direct.showbase.ShowBase",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "direct.showbase.DirectObject",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "panda3d.core",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "core.component_interface",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "core.event_bus",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "sys",
+      "type": "import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "pathlib",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "core.component_interface",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.graphics_manager",
+      "import": "core.event_bus",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.panda3d_initializer",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.panda3d_initializer",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.panda3d_initializer",
+      "import": "direct.showbase.ShowBase",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.panda3d_initializer",
+      "import": "panda3d.core",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.subsystem_factory",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.subsystem_factory",
+      "import": "pathlib",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.subsystem_factory",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.subsystem_manager",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.subsystem_manager",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.camera.camera_controller",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.camera.camera_controller",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.camera.camera_controller",
+      "import": "panda3d.core",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.camera.camera_controller",
+      "import": "direct.showbase.DirectObject",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.camera.camera_controller",
+      "import": "math",
+      "type": "import"
+    },
+    {
+      "module": "graphics.globe.coordinate_system",
+      "import": "math",
+      "type": "import"
+    },
+    {
+      "module": "graphics.globe.coordinate_system",
+      "import": "numpy",
+      "type": "import"
+    },
+    {
+      "module": "graphics.globe.coordinate_system",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.coordinate_system",
+      "import": "panda3d.core",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.coordinate_validation",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "import": "pathlib",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "import": "panda3d.core",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "import": "direct.showbase.DirectObject",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "import": "sys",
+      "type": "import"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "import": "pathlib",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.globe_renderer",
+      "import": "graphics.utils.asset_manager",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.globe_setup",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.globe.globe_setup",
+      "import": "pathlib",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.globe_setup",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.globe_setup",
+      "import": "panda3d.core",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.material_manager",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.globe.material_manager",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.material_manager",
+      "import": "panda3d.core",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.model_loader",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.globe.model_loader",
+      "import": "pathlib",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.model_loader",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.model_loader",
+      "import": "panda3d.core",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.texture_manager",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.globe.texture_manager",
+      "import": "pathlib",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.texture_manager",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.texture_manager",
+      "import": "panda3d.core",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.texture_manager",
+      "import": "direct.task",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.texture_manager",
+      "import": "sys",
+      "type": "import"
+    },
+    {
+      "module": "graphics.globe.texture_manager",
+      "import": "pathlib",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.globe.texture_manager",
+      "import": "graphics.utils.asset_manager",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.utils.asset_manager",
+      "import": "pathlib",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.utils.asset_manager",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.utils.asset_manager",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.utils.graphics_utils",
+      "import": "time",
+      "type": "import"
+    },
+    {
+      "module": "graphics.utils.graphics_utils",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.utils.graphics_utils",
+      "import": "gc",
+      "type": "import"
+    },
+    {
+      "module": "graphics.utils.graphics_utils",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.utils.panda3d_utils",
+      "import": "logging",
+      "type": "import"
+    },
+    {
+      "module": "graphics.utils.panda3d_utils",
+      "import": "typing",
+      "type": "from_import"
+    },
+    {
+      "module": "graphics.utils.panda3d_utils",
+      "import": "panda3d.core",
+      "type": "from_import"
+    }
+  ],
+  "circular_dependencies": [],
+  "external_dependencies": {},
+  "recommendations": [
+    "CRITICAL: 23 broken imports found - production modules non-functional",
+    "POSITIVE: 77 imports work correctly",
+    "Common failure: ModuleNotFoundError (23 occurrences)",
+    "IDENTIFIED ISSUE: 1 GLTF-related import failures - likely missing gltf library"
+  ]
+}
