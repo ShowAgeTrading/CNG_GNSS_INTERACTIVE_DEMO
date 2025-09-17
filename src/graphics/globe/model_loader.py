@@ -9,8 +9,7 @@ Last Modified: 2025-09-15
 Version: 1.0.0
 
 Dependencies:
-    - panda3d (1.10.15) - NodePath and model handling
-    - panda3d-gltf (1.3.0) - GLTF model loading
+    - panda3d (1.10.15) - NodePath, Loader, and model handling
 
 References:
     - Related Files: globe_renderer.py
@@ -27,8 +26,7 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-from panda3d.core import NodePath
-from gltf import load_model
+from panda3d.core import NodePath, Loader, Filename
 from ..utils.panda3d_utils import setup_node, apply_transform
 
 logger = logging.getLogger(__name__)
@@ -36,17 +34,18 @@ logger = logging.getLogger(__name__)
 
 class ModelLoader:
     """
-    Handles GLTF model loading and initialization for Earth globe.
+    Handles model loading and initialization for Earth globe using Panda3D.
     
     Extracted from globe_renderer.py to maintain file size compliance.
-    Manages model loading, validation, and initial setup.
+    Manages model loading, validation, and initial setup using proven Panda3D patterns.
     """
     
     def __init__(self, assets_path: Path) -> None:
         self._assets_path = assets_path
+        self._loader = Loader.getGlobalPtr()
     
     def load_earth_model(self, render_node: NodePath, scale: float = 1.0) -> Optional[NodePath]:
-        """Load Earth GLTF model and attach to render tree."""
+        """Load Earth model and attach to render tree using proven Panda3D patterns."""
         try:
             model_path = self._assets_path / "models" / "earth" / "earth_3D.gltf"
             
@@ -56,11 +55,12 @@ class ModelLoader:
             
             logger.info(f"Loading Earth model from {model_path}")
             
-            # Load GLTF model
-            globe_model = load_model(str(model_path))
+            # Load model using Panda3D loader (proven working pattern from visual test)
+            panda_filename = Filename.fromOsSpecific(str(model_path))
+            globe_model = self._loader.loadModel(panda_filename)
             
             if not globe_model:
-                logger.error("Failed to load GLTF model")
+                logger.error("Failed to load model - file may be corrupt or unsupported")
                 return None
             
             # Parent and configure using utilities
