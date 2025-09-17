@@ -905,7 +905,7 @@
           "type": "import",
           "module": "logging",
           "alias": null,
-          "line": 26
+          "line": 25
         },
         {
           "type": "from_import",
@@ -913,7 +913,7 @@
           "names": [
             "Path"
           ],
-          "line": 27
+          "line": 26
         },
         {
           "type": "from_import",
@@ -921,23 +921,17 @@
           "names": [
             "Optional"
           ],
-          "line": 28
+          "line": 27
         },
         {
           "type": "from_import",
           "module": "panda3d.core",
           "names": [
-            "NodePath"
+            "NodePath",
+            "Loader",
+            "Filename"
           ],
-          "line": 30
-        },
-        {
-          "type": "from_import",
-          "module": "gltf",
-          "names": [
-            "load_model"
-          ],
-          "line": 31
+          "line": 29
         },
         {
           "type": "from_import",
@@ -946,7 +940,7 @@
             "setup_node",
             "apply_transform"
           ],
-          "line": 32
+          "line": 30
         }
       ],
       "import_success": {
@@ -956,13 +950,6 @@
         "panda3d.core": true
       },
       "import_errors": {
-        "gltf": {
-          "module": "graphics.globe.model_loader",
-          "failed_import": "gltf",
-          "import_type": "from_import",
-          "error": "No module named 'gltf'",
-          "error_type": "ModuleNotFoundError"
-        },
         "utils.panda3d_utils": {
           "module": "graphics.globe.model_loader",
           "failed_import": "utils.panda3d_utils",
@@ -1327,13 +1314,6 @@
       "failed_import": "utils.panda3d_utils",
       "import_type": "from_import",
       "error": "No module named 'utils.panda3d_utils'",
-      "error_type": "ModuleNotFoundError"
-    },
-    {
-      "module": "graphics.globe.model_loader",
-      "failed_import": "gltf",
-      "import_type": "from_import",
-      "error": "No module named 'gltf'",
       "error_type": "ModuleNotFoundError"
     },
     {
@@ -1748,9 +1728,8 @@
   "circular_dependencies": [],
   "external_dependencies": {},
   "recommendations": [
-    "CRITICAL: 23 broken imports found - production modules non-functional",
+    "CRITICAL: 22 broken imports found - production modules non-functional",
     "POSITIVE: 77 imports work correctly",
-    "Common failure: ModuleNotFoundError (23 occurrences)",
-    "IDENTIFIED ISSUE: 1 GLTF-related import failures - likely missing gltf library"
+    "Common failure: ModuleNotFoundError (22 occurrences)"
   ]
 }
