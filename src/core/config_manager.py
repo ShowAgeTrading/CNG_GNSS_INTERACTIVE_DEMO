@@ -36,7 +36,7 @@ import jsonschema
 class ConfigManager:
     """Configuration management with validation and dot notation access."""
     
-    def __init__(self, config_path: str) -> None:
+    def __init__(self, config_path: str = "config/app_config.json") -> None:
         """Initialize configuration manager."""
         self._config_path = Path(config_path)
         self._config_data: Dict[str, Any] = {}
