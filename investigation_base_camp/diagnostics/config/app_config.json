@@ -1,0 +1,31 @@
+{
+  "app": {
+    "title": "CNG GNSS Interactive Demo",
+    "version": "1.0.0",
+    "log_level": "INFO",
+    "performance_monitoring": true
+  },
+  "graphics": {
+    "target_fps": 60,
+    "vsync": true,
+    "anti_aliasing": 4
+  },
+  "simulation": {
+    "default_time_speed": 1.0,
+    "time_step_ms": 16.67,
+    "max_satellites": 100
+  },
+  "plugins": {
+    "auto_reload": true,
+    "watch_directories": [
+      "src/plugins"
+    ],
+    "load_on_startup": []
+  },
+  "logging": {
+    "file_level": "INFO",
+    "console_level": "INFO",
+    "max_file_size": "10MB",
+    "backup_count": 5
+  }
+}
